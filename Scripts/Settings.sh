@@ -43,6 +43,9 @@ function pin_arm_perf_kernel_config() {
 # CONFIG_ARM_SMMU_V3_PMU is not set
 # CONFIG_ARM_DSU_PMU is not set
 # CONFIG_ARM_SPE_PMU is not set
+CONFIG_KERNEL_FTRACE=y
+CONFIG_KERNEL_FUNCTION_TRACER=y
+CONFIG_KERNEL_DYNAMIC_FTRACE=y
 EOF
 }
 
