@@ -179,8 +179,11 @@ jobs:
 
           if [ "$WRT_HONK" = "true" ]; then
             printf '%s\n' \
+              'CONFIG_KERNEL_DEBUG_INFO=y' \
+              'CONFIG_KERNEL_DEBUG_INFO_BTF=y' \
               'CONFIG_PACKAGE_kmod-xdp-sockets=y' \
               'CONFIG_PACKAGE_honk=y' \
+              'CONFIG_HONK_USE_KERNEL_BTF=y' \
               'CONFIG_PACKAGE_luci-app-honk=y' \
               'CONFIG_PACKAGE_luci-i18n-honk-zh-cn=y' >> .config
           fi
@@ -190,7 +193,9 @@ jobs:
           make defconfig -j$(nproc) && make clean -j$(nproc)
 
           if [ "$WRT_HONK" = "true" ]; then
+            grep -qx 'CONFIG_KERNEL_DEBUG_INFO_BTF=y' .config
             grep -qx 'CONFIG_PACKAGE_honk=y' .config
+            grep -qx 'CONFIG_HONK_USE_KERNEL_BTF=y' .config
             grep -qx 'CONFIG_PACKAGE_luci-app-honk=y' .config
             grep -qx 'CONFIG_PACKAGE_luci-i18n-honk-zh-cn=y' .config
           fi
