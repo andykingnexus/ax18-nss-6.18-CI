@@ -23,6 +23,11 @@ on:
         default: 'false'
         required: false
         type: boolean
+      HONK:
+        description: '集成最新 Honk 核心、LuCI 管理页和简体中文翻译。'
+        default: true
+        required: false
+        type: boolean
 
 #CI权限
 permissions: write-all
@@ -66,3 +71,5 @@ jobs:
       WRT_PACKAGE: ${{inputs.PACKAGE}}
       #仅输出配置文件
       WRT_TEST: ${{inputs.TEST}}
+      #Honk（手动构建默认启用；自动构建也启用）
+      WRT_HONK: ${{ github.event_name != 'workflow_dispatch' || inputs.HONK }}
