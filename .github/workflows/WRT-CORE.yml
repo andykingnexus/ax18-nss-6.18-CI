@@ -43,6 +43,10 @@ on:
       WRT_TEST:
         required: false
         type: string
+      WRT_HONK:
+        required: false
+        type: boolean
+        default: false
 
 env:
   GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
@@ -58,6 +62,7 @@ env:
   WRT_SOURCE: ${{inputs.WRT_SOURCE}}
   WRT_PACKAGE: ${{inputs.WRT_PACKAGE}}
   WRT_TEST: ${{inputs.WRT_TEST}}
+  WRT_HONK: ${{inputs.WRT_HONK}}
 
 jobs:
   core:
@@ -172,9 +177,23 @@ jobs:
             cat $GITHUB_WORKSPACE/Config/$WRT_CONFIG.txt $GITHUB_WORKSPACE/Config/GENERAL.txt >> .config
           fi
 
+          if [ "$WRT_HONK" = "true" ]; then
+            printf '%s\n' \
+              'CONFIG_PACKAGE_kmod-xdp-sockets=y' \
+              'CONFIG_PACKAGE_honk=y' \
+              'CONFIG_PACKAGE_luci-app-honk=y' \
+              'CONFIG_PACKAGE_luci-i18n-honk-zh-cn=y' >> .config
+          fi
+
           $GITHUB_WORKSPACE/Scripts/Settings.sh
 
           make defconfig -j$(nproc) && make clean -j$(nproc)
+
+          if [ "$WRT_HONK" = "true" ]; then
+            grep -qx 'CONFIG_PACKAGE_honk=y' .config
+            grep -qx 'CONFIG_PACKAGE_luci-app-honk=y' .config
+            grep -qx 'CONFIG_PACKAGE_luci-i18n-honk-zh-cn=y' .config
+          fi
 
       - name: Download Packages
         if: env.WRT_TEST != 'true'
