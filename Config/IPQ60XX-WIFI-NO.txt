@@ -2,6 +2,10 @@ CONFIG_TARGET_qualcommax=y
 CONFIG_TARGET_qualcommax_ipq60xx=y
 CONFIG_TARGET_qualcommax_ipq60xx_DEVICE_cmiot_ax18=y
 
+# nftables queue userspace handoff
+CONFIG_PACKAGE_kmod-nfnetlink-queue=y
+CONFIG_PACKAGE_kmod-nft-queue=y
+
 # 不要 Wi-Fi
 CONFIG_PACKAGE_kmod-ath=n
 CONFIG_PACKAGE_kmod-ath11k=n
